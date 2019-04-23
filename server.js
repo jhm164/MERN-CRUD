@@ -58,13 +58,57 @@ res.json(result);
 });
 })
 
+app.get('/update',(req,res)=>{
+var roll=req.query.roll;
+var name=req.query.name;
+var email=req.query.email;
+console.log(roll);
 
-    function showdata(roll){
-var x=[];
-        
-    return x;
+mongoClient.connect(url,(err,db)=>{
+    if(err) throw err;
+
+    var mydb=db.db('mongopract');
+var myqeury={
+    roll:roll
 }
-    
+var changedata={ $set:{
+    name:name,
+    email:email
+}
+}
+mydb.collection('student').updateOne(myqeury,changedata,(err,response)=>{
+    if(err) throw err;
+res.send(response);
+db.close();
+})
+
+
+})
+
+
+
+})
+
+
+app.get('/delete',(req,res)=>{
+    var roll=req.query.roll;
+mongoClient.connect(url,(err,db)=>{
+var mydb=db.db('mongopract');
+var myquery={
+    roll:roll
+}
+
+mydb.collection('student').deleteOne(myquery,(err,response)=>{
+if(err) throw err;
+
+res.send(response);
+
+})
+
+})
+
+})
+
 
 var PORT = process.env.PORT || 3001; 
 
